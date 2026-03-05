@@ -1,12 +1,8 @@
 ﻿using Domain.Enums;
 
 namespace Domain.Entities;
-public class User
+public class User : BaseEntity
 {
-    /// <summary>
-    ///     Id.
-    /// </summary>
-    public int Id { get; set; }
 
     /// <summary>
     ///     Имя пользователя.
