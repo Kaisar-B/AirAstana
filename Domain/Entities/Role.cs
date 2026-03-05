@@ -1,12 +1,6 @@
-﻿
-
-namespace Domain.Entities;
-public class Role
+﻿namespace Domain.Entities;
+public class Role : BaseEntity
 {
-    /// <summary>
-    ///     Id.
-    /// </summary>
-    public int Id { get; set; }
 
     /// <summary>
     ///     Роль в виде кода.
