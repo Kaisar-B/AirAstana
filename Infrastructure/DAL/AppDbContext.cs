@@ -7,6 +7,7 @@ using System.Reflection;
 /// Содержит DbSet для сущностей Flight, Role и User,
 /// а также конфигурацию моделей и правил конвенций.
 /// </summary>
+namespace Infrastructure.DAL;
 public class AppDbContext : DbContext
 {
     /// <summary>

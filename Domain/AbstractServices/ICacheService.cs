@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Cache;
+﻿namespace Domain.AbstractServices;
 /// <summary>
 /// Сервис для работы с кэшированными данными.
 /// </summary>

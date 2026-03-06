@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Infrastructure.Repository;
+namespace Infrastructure.DAL;
 
 /// <summary>
 /// Применяет все ожидающие миграции к базе данных при старте приложения.

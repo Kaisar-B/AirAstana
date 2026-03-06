@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Identity.Authentication;
+﻿namespace Application.Common.Interfaces;
 /// <summary>
 /// Сервис для работы с аутентификацией и JWT-токенами.
 /// Предоставляет методы для генерации и валидации токенов пользователя.

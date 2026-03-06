@@ -3,8 +3,9 @@ using Domain.Enums;
 using Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Infrastructure.DAL;
 
-namespace Infrastructure.Repository;
+namespace Infrastructure.DAL;
 
 /// <summary>
 /// Класс для инициализации базы данных начальными данными.
