@@ -31,16 +31,18 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponse>
         if (user == null || !_passwordHasher.VerifyPassword(request.Password, user.PasswordHashed))
             throw new DomainException("Неверное имя пользователя или пароль");
 
+        var role = await _userRepository.GetByIdAsync<Role>(user.RoleId);
+
         var token = _authService.GenerateJwtToken(
             user.Id.ToString(),
             user.Username,
-            user.Role.Code);
+            role.Code);
 
         return new AuthResponse
         {
             Token = token,
             Username = user.Username,
-            Role = user.Role.Code,
+            Role = role.Code,
             ExpiresAt = DateTime.UtcNow.AddHours(24)
         };
 

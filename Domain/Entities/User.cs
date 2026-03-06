@@ -23,9 +23,4 @@ public class User : BaseEntity
     ///     Роль.
     /// </summary>
     public Role Role { get; set; }
-
-    /// <summary>
-    ///     Соль.
-    /// </summary>
-    public byte[] Salt { get; set; } = null!;
 }

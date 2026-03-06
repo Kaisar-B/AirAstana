@@ -29,13 +29,16 @@ internal class CreateFlightCommandHandler : IRequestHandler<CreateFlightCommand,
 
     public async Task<FlightDto> Handle(CreateFlightCommand request, CancellationToken cancellationToken)
     {
+        var now = DateTimeOffset.UtcNow;
         var flight = new Flight
         {
             Origin = request.Origin,
             Destination = request.Destination,
             Departure = request.Departure,
             Arrival = request.Arrival,
-            Status = request.Status
+            Status = request.Status,
+            Created = now,
+            CreatedBy = _sessionUser.Username
         };
 
         await _repository.BeginTransactionAsync(cancellationToken);

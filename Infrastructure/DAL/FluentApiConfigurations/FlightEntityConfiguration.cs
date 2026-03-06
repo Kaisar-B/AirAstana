@@ -6,7 +6,7 @@ namespace Infrastructure.Repository.FluentApiConfigurations;
 /// <summary>
 ///     Настройка бозовой доменной модели.
 /// </summary>
-internal class FlightEntityConfiguration : BaseEntityConfiguration, IEntityTypeConfiguration<Flight>
+internal class FlightEntityConfiguration : BaseEntityConfiguration<Flight>
 {
     public void Configure(EntityTypeBuilder<Flight> builder)
     {
@@ -25,6 +25,6 @@ internal class FlightEntityConfiguration : BaseEntityConfiguration, IEntityTypeC
         // Size limits
         builder.Property(f => f.Origin).IsRequired().HasMaxLength(256);
         builder.Property(f => f.Destination).IsRequired().HasMaxLength(256);
-
+        builder.HasBaseType(typeof(BaseEntity));
     }
 }

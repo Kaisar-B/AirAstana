@@ -4,7 +4,7 @@
 /// Базовый класс для всех сущностей.
 /// Содержит стандартные поля для аудита и идентификации.
 /// </summary>
-public class BaseEntity
+public abstract class BaseEntity
 {
     /// <summary>
     /// Уникальный идентификатор сущности.

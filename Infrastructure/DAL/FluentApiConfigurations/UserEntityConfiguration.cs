@@ -8,7 +8,7 @@ namespace Infrastructure.Repository.FluentApiConfigurations;
 /// <summary>
 ///     Настройка базовой доменной модели.
 /// </summary>
-internal class UserEntityConfiguration : BaseEntityConfiguration, IEntityTypeConfiguration<User>
+internal class UserEntityConfiguration : BaseEntityConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
@@ -17,7 +17,6 @@ internal class UserEntityConfiguration : BaseEntityConfiguration, IEntityTypeCon
         builder.HasOne(x=>x.Role).WithMany(x=>x.Users)
             .HasForeignKey(x=>x.RoleId)
             .OnDelete(DeleteBehavior.Restrict);
-        builder.Property(x=>x.Salt).IsRequired(true);
 
         // Не кластерезованный индекс.
         builder.HasIndex(x => x.Username);
@@ -25,6 +24,6 @@ internal class UserEntityConfiguration : BaseEntityConfiguration, IEntityTypeCon
         // Size limits
         builder.Property(u => u.Username).IsRequired().HasMaxLength(256);
         builder.Property(u => u.PasswordHashed).IsRequired().HasMaxLength(256);
-
+        builder.HasBaseType(typeof(BaseEntity));
     }
 }

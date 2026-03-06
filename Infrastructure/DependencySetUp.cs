@@ -111,5 +111,11 @@ public static class DependencySetUp
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),       
             };
         });
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Moderator", policy => policy.RequireRole("Moderator", "Admin"));
+            options.AddPolicy("User", policy => policy.RequireRole("User", "Moderator", "Admin"));
+        });
     }
 }

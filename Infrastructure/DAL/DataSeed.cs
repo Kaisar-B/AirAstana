@@ -4,6 +4,7 @@ using Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Infrastructure.DAL;
+using Application.Common.Interfaces;
 
 namespace Infrastructure.DAL;
 
@@ -11,10 +12,10 @@ namespace Infrastructure.DAL;
 /// Класс для инициализации базы данных начальными данными.
 /// Выполняет применение всех ожидающих миграций и заполнение таблиц Flights, Roles и Users.
 /// </summary>
-internal class DataSeed
+public class DataSeed
 {
     private readonly AppDbContext _dbContext;
-    private readonly PasswordHasher _passwordHasher;
+    private readonly IPasswordHasher _passwordHasher;
     private readonly ILogger<DataSeed> _logger;
     private readonly AppDbContextMigrator _initializer;
 
@@ -25,7 +26,7 @@ internal class DataSeed
     /// <param name="passwordHasher">Сервис хэширования паролей.</param>
     /// <param name="logger">Логгер для вывода сообщений.</param>
     /// <param name="initializer">Сервис для применения миграций к базе данных.</param>
-    public DataSeed(AppDbContext dbContext, PasswordHasher passwordHasher, ILogger<DataSeed> logger, AppDbContextMigrator initializer)
+    public DataSeed(AppDbContext dbContext, IPasswordHasher passwordHasher, ILogger<DataSeed> logger, AppDbContextMigrator initializer)
     {
         _dbContext = dbContext;
         _passwordHasher = passwordHasher;
@@ -37,7 +38,7 @@ internal class DataSeed
     /// Применяет все ожидающие миграции и заполняет базу данных начальными данными.
     /// </summary>
     /// <param name="builder">ModelBuilder для EF Core (может использоваться для конфигурации моделей при необходимости).</param>
-    internal async Task SetDataBase(ModelBuilder builder)
+    public async Task SetDataBaseAsync()
     {
         try
         {
@@ -74,11 +75,11 @@ internal class DataSeed
 
         var flights = new List<Flight>
         {
-            new Flight { Origin = "Тараз", Destination = "Актау", Departure = now.AddDays(1).AddHours(7), Arrival = now.AddDays(1).AddHours(9), Status = Status.InTime, Created = now, CreatedBy = "Система" },
-            new Flight { Origin = "Актау", Destination = "Актобе", Departure = now.AddDays(1).AddHours(12), Arrival = now.AddDays(1).AddHours(14), Status = Status.Delayed, Created = now, CreatedBy = "Система" },
-            new Flight { Origin = "Актобе", Destination = "Кокшетау", Departure = now.AddDays(2).AddHours(6), Arrival = now.AddDays(2).AddHours(8), Status = Status.Cancelled, Created = now, CreatedBy = "Система" },
-            new Flight { Origin = "Кокшетау", Destination = "Семей", Departure = now.AddDays(2).AddHours(15), Arrival = now.AddDays(2).AddHours(17), Status = Status.InTime, Created = now, CreatedBy = "Система" },
-            new Flight { Origin = "Семей", Destination = "Туркестан", Departure = now.AddDays(3).AddHours(10), Arrival = now.AddDays(3).AddHours(13), Status = Status.InTime, Created = now, CreatedBy = "Система" }
+            new Flight { Origin = "Тараз", Destination = "Актау", Departure = now.AddDays(1).AddHours(7), Arrival = now.AddDays(1).AddHours(9), Status = Status.InTime, Created = now, CreatedBy = "System" },
+            new Flight { Origin = "Актау", Destination = "Актобе", Departure = now.AddDays(1).AddHours(12), Arrival = now.AddDays(1).AddHours(14), Status = Status.Delayed, Created = now, CreatedBy = "System" },
+            new Flight { Origin = "Актобе", Destination = "Кокшетау", Departure = now.AddDays(2).AddHours(6), Arrival = now.AddDays(2).AddHours(8), Status = Status.Cancelled, Created = now, CreatedBy = "System" },
+            new Flight { Origin = "Кокшетау", Destination = "Семей", Departure = now.AddDays(2).AddHours(15), Arrival = now.AddDays(2).AddHours(17), Status = Status.InTime, Created = now, CreatedBy = "System" },
+            new Flight { Origin = "Семей", Destination = "Туркестан", Departure = now.AddDays(3).AddHours(10), Arrival = now.AddDays(3).AddHours(13), Status = Status.InTime, Created = now, CreatedBy = "System" }
         };
 
         // Сохраняем новые рейсы в базу
@@ -100,10 +101,11 @@ internal class DataSeed
             return;
         }
 
+        var now = DateTimeOffset.UtcNow;
         var roles = new List<Role>
         {
-            new Role { Code = "User" },
-            new Role { Code = "Admin" }
+            new Role { Code = "User", Created = now, CreatedBy="System"},
+            new Role { Code = "Admin", Created = now, CreatedBy="System"}
         };
 
         await _dbContext.Roles.AddRangeAsync(roles);
@@ -129,8 +131,8 @@ internal class DataSeed
 
         var users = new List<User>
         {
-            new User { Username = "systemadmin", PasswordHashed = _passwordHasher.HashPassword("admin!234"), RoleId = adminRole.Id, Created = DateTimeOffset.UtcNow, CreatedBy = "Система" },
-            new User { Username = "standarduser", PasswordHashed = _passwordHasher.HashPassword("user!234"), RoleId = userRole.Id, Created = DateTimeOffset.UtcNow, CreatedBy = "Система" }
+            new User { Username = "systemadmin", PasswordHashed = _passwordHasher.HashPassword("admin!234"), RoleId = adminRole.Id, Created = DateTimeOffset.UtcNow, CreatedBy = "System" },
+            new User { Username = "standarduser", PasswordHashed = _passwordHasher.HashPassword("user!234"), RoleId = userRole.Id, Created = DateTimeOffset.UtcNow, CreatedBy = "System" }
         };
 
         // Сохраняем новых пользователей

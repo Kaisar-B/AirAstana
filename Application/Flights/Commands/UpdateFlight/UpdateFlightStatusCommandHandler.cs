@@ -39,7 +39,7 @@ public class UpdateFlightStatusCommandHandler : IRequestHandler<UpdateFlightStat
 
         var oldStatus = flight.Status;
         
-        UpdateStatus(flight, request.Status);
+        UpdateStatus( _sessionUser, flight, request.Status);
 
         _repository.Update<Flight>(flight);
         
@@ -58,12 +58,16 @@ public class UpdateFlightStatusCommandHandler : IRequestHandler<UpdateFlightStat
         return Unit.Value;
     }
 
-    private static void UpdateStatus(Flight flight ,Status newStatus)
+    private static void UpdateStatus(ISessionUser sessionUser, Flight flight ,Status newStatus)
     {
         if (flight.Status == Status.Cancelled)
             throw new DomainException("Не удается обновить статус отмененного рейса");
         if (flight.Status == newStatus)
             throw new DomainException($"Не удается обновить статус. Текущий статус [{flight.Status}]");
         flight.Status = newStatus;
+
+        var now = DateTimeOffset.UtcNow;
+        flight.LastModifiedBy = sessionUser.Username;
+        flight.LastModified = now;
     }
 }

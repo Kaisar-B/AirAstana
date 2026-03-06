@@ -5,7 +5,7 @@ namespace Infrastructure.Repository.FluentApiConfigurations;
 /// <summary>
 ///     Настройка базовой доменной модели.
 /// </summary>
-internal class RoleEntityConfiguration : BaseEntityConfiguration, IEntityTypeConfiguration<Role>
+internal class RoleEntityConfiguration : BaseEntityConfiguration<Role>
 {
     public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Role> builder)
     {
@@ -17,5 +17,6 @@ internal class RoleEntityConfiguration : BaseEntityConfiguration, IEntityTypeCon
 
         // Size limits 
         builder.Property(r => r.Code).IsRequired().HasMaxLength(256);
+        builder.HasBaseType(typeof(BaseEntity));
     }
 }
