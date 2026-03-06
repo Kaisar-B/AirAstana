@@ -1,11 +1,19 @@
-﻿using Infrastructure.Cache;
+﻿using Application.Common.Interfaces;
+using Domain.RepositoryAbstraction;
+using Infrastructure.Cache;
+using Infrastructure.DAL;
 using Infrastructure.Identity.Authentication;
-using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Domain.AbstractServices;
 using Serilog.Core;
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Security.Claims;
 
 namespace Infrastructure;
 
@@ -72,5 +80,36 @@ public static class DependencySetUp
 
         // Сервис аутентификации
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IRepository, Infrastructure.DAL.Repository>();
+
+        services.AddScoped<ISessionUser, SessionUserService>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+        var jwtSettings = configuration.GetSection(JwtConfigs.SectionName).Get<JwtConfigs>()
+            ?? throw new InvalidOperationException("Настройки JWT не найдены");
+
+        services.Configure<JwtConfigs>(configuration.GetSection(JwtConfigs.SectionName));
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero,
+                ValidateIssuerSigningKey = true,
+                NameClaimType = ClaimTypes.Name,
+                RoleClaimType = ClaimTypes.Role,
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),       
+            };
+        });
     }
 }

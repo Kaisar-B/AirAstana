@@ -1,8 +1,9 @@
 ﻿using BCryptLib = BCrypt.Net.BCrypt;
+using Application.Common.Interfaces;
 
 namespace Infrastructure.Identity
 {
-    public class PasswordHasher
+    public class PasswordHasher : IPasswordHasher
     {
         public string HashPassword(string password)
         {
