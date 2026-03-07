@@ -1,13 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Application.Common.PipelineBehaviors;
-using MediatR;
+﻿using Application.Common.PipelineBehaviors;
 using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Application;
 public static class DependencySetUp

@@ -1,11 +1,6 @@
-﻿using Application.Flights.DTOs;
+﻿using Application.Auth.Models.DTOs;
+using Application.Flights.DTOs;
 using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.Auth.Models.DTOs;
 using Domain.Enums;
 
 namespace Application.Common.Extensions;

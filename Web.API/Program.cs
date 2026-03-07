@@ -1,8 +1,7 @@
-﻿using Serilog;
-using Application;
+﻿using Application;
 using Infrastructure;
-using Infrastructure.DAL;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using Web.API.Middlewares;
 
 namespace Web.API;
@@ -72,13 +71,6 @@ public class Program
         // Можно настроить CORS от appsettings.
 
         var app = builder.Build();
-
-        using (var scope = app.Services.CreateScope())
-        {
-            var initializer = scope.ServiceProvider.GetRequiredService<DataSeed>();
-            await initializer.SetDataBaseAsync();
-        }
-
 
         app.UseMiddleware<ApplicationExceptionHandler>();
 

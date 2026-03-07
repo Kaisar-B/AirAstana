@@ -1,7 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Identity.Client;
 
 namespace Infrastructure.Repository.FluentApiConfigurations;
 
@@ -12,10 +11,10 @@ internal class UserEntityConfiguration : BaseEntityConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.Property(x=>x.Username).IsRequired(true);
+        builder.Property(x => x.Username).IsRequired(true);
         builder.Property(x => x.PasswordHashed).IsRequired(true);
-        builder.HasOne(x=>x.Role).WithMany(x=>x.Users)
-            .HasForeignKey(x=>x.RoleId)
+        builder.HasOne(x => x.Role).WithMany(x => x.Users)
+            .HasForeignKey(x => x.RoleId)
             .OnDelete(DeleteBehavior.Restrict);
 
         // Не кластерезованный индекс.

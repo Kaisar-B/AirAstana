@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.AppExceptions;
+﻿namespace Domain.AppExceptions;
 public class InputValidationException : Exception
 {
     public IDictionary<string, string[]> Errors { get; }

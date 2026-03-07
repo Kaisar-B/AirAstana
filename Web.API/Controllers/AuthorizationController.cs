@@ -1,7 +1,7 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
+﻿using Application.Auth.Commands;
 using Application.Auth.Models;
-using Application.Auth.Commands;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Web.API.Controllers;
 

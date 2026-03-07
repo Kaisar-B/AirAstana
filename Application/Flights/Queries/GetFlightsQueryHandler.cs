@@ -1,47 +1,40 @@
 ﻿using Application.Common.Extensions;
 using Application.Flights.DTOs;
 using Domain.AbstractServices;
-using Domain.Entities;
 using Domain.RepositoryAbstraction;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Flights.Queries;
 public class GetFlightsQueryHandler : IRequestHandler<GetFlightsQuery, List<FlightDto>>
 {
-    private readonly IRepository _repository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ICacheService _cacheService;
     private readonly ILogger<GetFlightsQueryHandler> _logger;
-    private const string CacheKey = "flights:all";
 
-    public GetFlightsQueryHandler(IRepository repository, ICacheService cacheService, ILogger<GetFlightsQueryHandler> logger)
+    public GetFlightsQueryHandler(IUnitOfWork unitOfWork, ICacheService cacheService, ILogger<GetFlightsQueryHandler> logger)
     {
-        _repository = repository;
+        _unitOfWork = unitOfWork;
         _cacheService = cacheService;
         _logger = logger;
     }
 
     public async Task<List<FlightDto>> Handle(GetFlightsQuery request, CancellationToken cancellationToken)
     {
-        var cachedFlights = await _cacheService.GetAsync<List<FlightDto>>(CacheKey, cancellationToken);
+        var cacheKey = $"flights:{request.Origin ?? "any"}:{request.Destination ?? "any"}";
+
+        var cachedFlights = await _cacheService.GetAsync<List<FlightDto>>(cacheKey, cancellationToken);
         List<FlightDto> flights;
 
         if (cachedFlights == null || !cachedFlights.Any())
         {
             _logger.LogInformation("Кэш рейсов пуст, выполняется запрос к базе данных...");
 
-            var flightsFromDb = await _repository.GetAllAsync<Flight>(cancellationToken);
+            var flightsFromDb = await _unitOfWork.Flights.WhereAsync(request.Origin, request.Destination, true);
 
             flights = flightsFromDb.Select(x => x.ToDto()).ToList();
 
-            flights = flights.OrderBy(f => f.Arrival).ToList();
-
-            await _cacheService.SetAsync(CacheKey, flights, TimeSpan.FromHours(1), cancellationToken);
+            await _cacheService.SetAsync(cacheKey, flights, TimeSpan.FromHours(1), cancellationToken);
             _logger.LogInformation("Рейсы успешно получены из базы и сохранены в кэш. Всего рейсов: {Count}", flights.Count);
         }
         else
@@ -49,11 +42,6 @@ public class GetFlightsQueryHandler : IRequestHandler<GetFlightsQuery, List<Flig
             flights = cachedFlights;
             _logger.LogInformation("Рейсы получены из кэша. Всего рейсов: {Count}", flights.Count);
         }
-
-        if (!string.IsNullOrWhiteSpace(request.Origin))
-            flights = flights.Where(f => f.Origin.Contains(request.Origin, StringComparison.OrdinalIgnoreCase)).ToList();
-        if (!string.IsNullOrWhiteSpace(request.Destination))
-            flights = flights.Where(f => f.Destination.Contains(request.Destination, StringComparison.OrdinalIgnoreCase)).ToList();
 
         _logger.LogInformation("После применения фильтров по отправлению и назначению осталось рейсов: {Count}", flights.Count);
 

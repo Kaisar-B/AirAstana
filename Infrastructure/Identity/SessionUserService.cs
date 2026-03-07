@@ -1,14 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Domain.AbstractServices;
+using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.AbstractServices;
 
 namespace Infrastructure.Identity;
-public class SessionUserService : ISessionUser
+public class SessionUserService : ISessionUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 

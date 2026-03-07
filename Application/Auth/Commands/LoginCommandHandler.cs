@@ -1,23 +1,17 @@
 ﻿using Application.Auth.Models;
 using Application.Common.Interfaces;
-using Domain.Entities;
+using Domain.AppExceptions;
 using Domain.RepositoryAbstraction;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.AppExceptions;
 
 namespace Application.Auth.Commands;
 public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponse>
 {
-    private readonly IRepository _userRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IPasswordHasher _passwordHasher;
     private readonly IAuthService _authService;
 
-    public LoginCommandHandler(IRepository userRepository, IPasswordHasher passwordHasher, IAuthService authService)
+    public LoginCommandHandler(IUserRepository userRepository, IPasswordHasher passwordHasher, IAuthService authService)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
@@ -31,18 +25,16 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponse>
         if (user == null || !_passwordHasher.VerifyPassword(request.Password, user.PasswordHashed))
             throw new DomainException("Неверное имя пользователя или пароль");
 
-        var role = await _userRepository.GetByIdAsync<Role>(user.RoleId);
-
         var token = _authService.GenerateJwtToken(
             user.Id.ToString(),
             user.Username,
-            role.Code);
+            user.Role.Code);
 
         return new AuthResponse
         {
             Token = token,
             Username = user.Username,
-            Role = role.Code,
+            Role = user.Role.Code,
             ExpiresAt = DateTime.UtcNow.AddHours(24)
         };
 

@@ -12,11 +12,11 @@ internal class FlightEntityConfiguration : BaseEntityConfiguration<Flight>
     {
         builder.ToTable("Flights");
 
-        builder.Property(x=>x.Origin).IsRequired(true);
+        builder.Property(x => x.Origin).IsRequired(true);
         builder.Property(x => x.Destination).IsRequired(true);
         builder.Property(x => x.Departure).IsRequired(true);
-        builder.Property(x=>x.Arrival).IsRequired(true);
-        builder.Property<Enum>(x=>x.Status).HasConversion<string>().IsRequired(true);
+        builder.Property(x => x.Arrival).IsRequired(true);
+        builder.Property<Enum>(x => x.Status).HasConversion<string>().IsRequired(true);
 
         // Не кластерезованный индекс.
         builder.HasIndex(x => x.Origin);

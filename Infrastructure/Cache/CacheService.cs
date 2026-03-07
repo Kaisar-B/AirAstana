@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿using Domain.AbstractServices;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 using System.Text;
 using System.Text.Json;
-using Domain.AbstractServices;
 
 namespace Infrastructure.Cache;
 

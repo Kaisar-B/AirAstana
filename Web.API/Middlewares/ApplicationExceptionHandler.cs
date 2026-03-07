@@ -1,5 +1,6 @@
 ﻿using Domain.AppExceptions;
 using System.Net;
+using System.Net.Mime;
 using System.Text.Json;
 using Web.API.Models;
 
@@ -12,6 +13,11 @@ namespace Web.API.Middlewares;
 /// </summary>
 public class ApplicationExceptionHandler
 {
+    private static readonly JsonSerializerOptions serilizeOptions = new JsonSerializerOptions()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+    private static readonly string jsonType = MediaTypeNames.Application.Json;
     private readonly RequestDelegate _next;
     private readonly ILogger<ApplicationExceptionHandler> _logger;
 
@@ -47,7 +53,7 @@ public class ApplicationExceptionHandler
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var response = context.Response;
-        response.ContentType = "application/json";
+        response.ContentType = jsonType;
 
         // Определяем тип исключения и формируем стандартизированный ответ
         var errorResponse = exception switch
@@ -73,7 +79,7 @@ public class ApplicationExceptionHandler
             )
         };
 
-        response.StatusCode = errorResponse.Data; // Код HTTP соответствует статусу ошибки
+        response.StatusCode = errorResponse.Data;
 
         // Логирование полной информации об ошибке
         _logger.LogError(exception,
@@ -83,12 +89,6 @@ public class ApplicationExceptionHandler
             response.StatusCode,
             exception.Message);
 
-        // Сериализация ответа в JSON с camelCase для фронтенда
-        var jsonResponse = JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
-
-        await response.WriteAsync(jsonResponse);
+        await response.WriteAsJsonAsync(errorResponse, options: serilizeOptions);
     }
 }
