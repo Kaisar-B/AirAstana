@@ -32,7 +32,6 @@ Test Web API для управления статусами авиарейсов
 - **Swagger / OpenAPI** (документация)
 - **Unit & Integration Tests** (тестирование)
 
----
 
 
 ### How it will look on GitHub
