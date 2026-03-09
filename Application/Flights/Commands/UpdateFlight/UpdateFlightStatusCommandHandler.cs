@@ -31,7 +31,7 @@ public class UpdateFlightStatusCommandHandler : IRequestHandler<UpdateFlightStat
         var flight = await _unitOfWork.Flights.GetByIdAsync(request.FlightId, cancellationToken);
 
         if (flight == null)
-            throw new Exception($"Сущность \"{nameof(Domain.Entities.Flight)}\" ({request.FlightId}) не найдена.");
+            throw new Exception($"Сущность \"{nameof(Flight)}\" ({request.FlightId}) не найдена.");
 
         var oldStatus = flight.Status;
 
