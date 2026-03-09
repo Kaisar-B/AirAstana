@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading;
 
 namespace Application.Flights.Commands.CreateFlight;
-internal class CreateFlightCommandHandler : IRequestHandler<CreateFlightCommand, FlightDto>
+public class CreateFlightCommandHandler : IRequestHandler<CreateFlightCommand, FlightDto>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ISessionUserService _sessionUser;
@@ -55,7 +55,7 @@ internal class CreateFlightCommandHandler : IRequestHandler<CreateFlightCommand,
             _sessionUser.Username ?? "Система",
             _timeProvider.GetUtcNow().ToLocalTime());
 
-        return flight.ToDto();
+        return createdFlight.ToDto();
     }
 
     private async static Task InvalidateCacheAsync(Flight flight, ICacheService _cacheService, CancellationToken cancellationToken)

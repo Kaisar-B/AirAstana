@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36623.8 d17.14
+VisualStudioVersion = 17.14.36623.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{6EE48E73-66AA-4252-B980-4DF500672461}"
 EndProject
@@ -10,6 +10,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{3DAD39BA-FB99-49AC-89C2-D55C8F819E7D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.API", "Web.API\Web.API.csproj", "{33AD9386-BC25-40C0-8A6B-27805DBF1BDA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirAstana.UnitTests", "AirAstana.UnitTests\AirAstana.UnitTests.csproj", "{8DE64B2C-ED17-4338-9C25-CB6433BD0DE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirAstana.IntegrationTests", "AirAstana.IntegrationTests\AirAstana.IntegrationTests.csproj", "{D5D1F0A4-C322-43AB-9468-F6171050A72F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +39,21 @@ Global
 		{33AD9386-BC25-40C0-8A6B-27805DBF1BDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33AD9386-BC25-40C0-8A6B-27805DBF1BDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33AD9386-BC25-40C0-8A6B-27805DBF1BDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DE64B2C-ED17-4338-9C25-CB6433BD0DE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DE64B2C-ED17-4338-9C25-CB6433BD0DE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DE64B2C-ED17-4338-9C25-CB6433BD0DE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DE64B2C-ED17-4338-9C25-CB6433BD0DE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5D1F0A4-C322-43AB-9468-F6171050A72F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5D1F0A4-C322-43AB-9468-F6171050A72F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5D1F0A4-C322-43AB-9468-F6171050A72F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5D1F0A4-C322-43AB-9468-F6171050A72F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8DE64B2C-ED17-4338-9C25-CB6433BD0DE0} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{D5D1F0A4-C322-43AB-9468-F6171050A72F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DFE06A73-43BF-48A2-8E42-2B3FB08FA744}
