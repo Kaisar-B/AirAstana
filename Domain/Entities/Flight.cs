@@ -3,7 +3,7 @@
 namespace Domain.Entities;
 public class Flight : BaseEntity
 {
-    
+
     /// <summary>
     /// Место отправки.
     /// </summary>

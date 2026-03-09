@@ -1,5 +1,5 @@
-﻿using BCryptLib = BCrypt.Net.BCrypt;
-using Application.Common.Interfaces;
+﻿using Application.Common.Interfaces;
+using BCryptLib = BCrypt.Net.BCrypt;
 
 namespace Infrastructure.Identity
 {

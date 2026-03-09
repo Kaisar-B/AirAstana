@@ -8,13 +8,13 @@ namespace Infrastructure.Repository.FluentApiConfigurations;
 /// Конфигурация Fluent API для базовой сущности BaseEntity.
 /// Настраивает ключи и обязательные/необязательные поля.
 /// </summary>
-internal class BaseEntityConfiguration<T> : IEntityTypeConfiguration<T> where T: BaseEntity
+internal class BaseEntityConfiguration<T> : IEntityTypeConfiguration<T> where T : BaseEntity
 {
     public void Configure(EntityTypeBuilder<T> builder)
     {
         // Устанавливаем первичный ключ
         builder.HasKey(x => x.Id);
-        
+
         // Обязательные поля
         builder.Property(x => x.Created).IsRequired(true);
         builder.Property(x => x.CreatedBy).IsRequired(true);

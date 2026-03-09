@@ -1,19 +1,19 @@
 ﻿using Application.Common.Interfaces;
+using Domain.AbstractServices;
 using Domain.RepositoryAbstraction;
 using Infrastructure.Cache;
 using Infrastructure.DAL;
+using Infrastructure.DAL.Repositories;
+using Infrastructure.Identity;
 using Infrastructure.Identity.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
-using Domain.AbstractServices;
-using Serilog.Core;
-using Infrastructure.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Serilog;
 using System.Security.Claims;
+using System.Text;
 
 namespace Infrastructure;
 
@@ -80,9 +80,11 @@ public static class DependencySetUp
 
         // Сервис аутентификации
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IRepository, Infrastructure.DAL.Repository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IFlightRepository, FlightRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        services.AddScoped<ISessionUser, SessionUserService>();
+        services.AddScoped<ISessionUserService, SessionUserService>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
 
         var jwtSettings = configuration.GetSection(JwtConfigs.SectionName).Get<JwtConfigs>()
@@ -108,7 +110,7 @@ public static class DependencySetUp
                 RoleClaimType = ClaimTypes.Role,
                 ValidIssuer = jwtSettings.Issuer,
                 ValidAudience = jwtSettings.Audience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),       
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),
             };
         });
 
@@ -117,5 +119,7 @@ public static class DependencySetUp
             options.AddPolicy("Moderator", policy => policy.RequireRole("Moderator", "Admin"));
             options.AddPolicy("User", policy => policy.RequireRole("User", "Moderator", "Admin"));
         });
+
+        services.AddHostedService<DataSeedHostService>();
     }
 }
