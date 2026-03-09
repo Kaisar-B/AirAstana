@@ -46,7 +46,7 @@ Body:
   "username": "admin",
   "password": "admin123"
 }
-
+```
 
 ## 🏗 Архитектура — Clean Architecture (DDD)
 
