@@ -47,7 +47,6 @@ Body:
   "password": "admin123"
 }
 
----
 
 ## 🏗 Архитектура — Clean Architecture (DDD)
 
