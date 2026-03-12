@@ -4,7 +4,7 @@ Test Web API для управления статусами авиарейсов
 ---
 ## 🔗 ✅ Выполненные требования ТЗ
 
-- ✅ **.NET 6, EF Core Code First**
+- ✅ **.NET 8, EF Core Code First**
 - ✅ **SOLID, KISS, DRY принципы**
 - ✅ **MediatR + CQRS паттерны**
 - ✅ **FluentValidation**
